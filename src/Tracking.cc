@@ -1723,7 +1723,10 @@ void Tracking::Track()
 
             }
             if(!bOK)
+            {
+                mState == RECENTLY_LOST;
                 cout << "Fail to track local map!" << endl;
+            }
         }
         else
         {
@@ -1778,6 +1781,7 @@ void Tracking::Track()
                 {
                     cout << "RESETING FRAME!!!" << endl;
                     ResetFrameIMU();
+                    mLastBias = mCurrentFrame.mImuBias;
                 }
                 else if(mCurrentFrame.mnId>(mnLastRelocFrameId+30))
                     mLastBias = mCurrentFrame.mImuBias;

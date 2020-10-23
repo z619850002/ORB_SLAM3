@@ -192,3 +192,9 @@ Examples/Stereo-Inertial/stereo_inertial_tum_vi.cc)
 target_link_libraries(stereo_inertial_tum_vi ${PROJECT_NAME})
 
 
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/Fisheye)
+
+add_executable(fisheye
+Examples/Fisheye/fisheye.cc)
+target_link_libraries(fisheye ${PROJECT_NAME})

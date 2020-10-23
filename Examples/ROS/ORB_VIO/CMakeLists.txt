@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.4.6)
+set(OpenCV_DIR "/usr/local/share/OpenCV")
 include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 
 rosbuild_init()
@@ -30,14 +31,7 @@ endif()
 
 LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../../../cmake_modules)
 
-find_package(OpenCV 3.0 QUIET)
-if(NOT OpenCV_FOUND)
-   find_package(OpenCV 2.4.3 QUIET)
-   if(NOT OpenCV_FOUND)
-      message(FATAL_ERROR "OpenCV > 2.4.3 not found.")
-   endif()
-endif()
-
+find_package(OpenCV 3.0 REQUIRED)
 find_package(Eigen3 3.1.0 REQUIRED)
 find_package(Pangolin REQUIRED)
 
@@ -50,6 +44,7 @@ find_package(catkin REQUIRED COMPONENTS
     tf
     cv_bridge
     )
+
 
 include_directories(
 ${PROJECT_SOURCE_DIR}
@@ -68,61 +63,17 @@ ${Pangolin_LIBRARIES}
 ${PROJECT_SOURCE_DIR}/../../../Thirdparty/DBoW2/lib/libDBoW2.so
 ${PROJECT_SOURCE_DIR}/../../../Thirdparty/g2o/lib/libg2o.so
 ${PROJECT_SOURCE_DIR}/../../../lib/libORB_SLAM3.so
--lboost_system
 )
 
-# Node for monocular camera
-rosbuild_add_executable(Mono
-src/ros_mono.cc
-)
 
-target_link_libraries(Mono
+
+
+rosbuild_add_executable(MYNT_VIO
+src/mynt_vio.cc
+src/MsgSync/MsgSynchronizer.cpp
+src/MsgSync/MsgSynchronizer.h
+)
+target_link_libraries(MYNT_VIO
 ${LIBS}
 )
 
-# Node for monocular camera (Augmented Reality Demo)
-rosbuild_add_executable(MonoAR
-src/AR/ros_mono_ar.cc
-src/AR/ViewerAR.h
-src/AR/ViewerAR.cc
-)
-
-target_link_libraries(MonoAR
-${LIBS}
-)
-
-# Node for stereo camera
-rosbuild_add_executable(Stereo
-src/ros_stereo.cc
-)
-
-target_link_libraries(Stereo
-${LIBS}
-)
-
-# Node for RGB-D camera
-rosbuild_add_executable(RGBD
-src/ros_rgbd.cc
-)
-
-target_link_libraries(RGBD
-${LIBS}
-)
-
-# Node for monocular-inertial camera
-rosbuild_add_executable(Mono_Inertial
-src/ros_mono_inertial.cc
-)
-
-target_link_libraries(Mono_Inertial
-${LIBS}
-)
-
-# Node for stereo-inertial camera
-rosbuild_add_executable(Stereo_Inertial
-src/ros_stereo_inertial.cc
-)
-
-target_link_libraries(Stereo_Inertial
-${LIBS}
-)
